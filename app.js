@@ -10,21 +10,53 @@ const logger = require('morgan');
  * Routers
  */
 
+const indexRouter = require('./routes/indexRouter');
+const usersRouter = require('./routes/usersRouter');
 const productsRouter = require('./routes/productsRouter');
 
-// TODO: Connect to MongoDB
+/**
+ * Connect to MongoDB
+ */
+
+const url = config.mongoUrl;
+const connect = mongoose.connect(url, {
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+connect
+  .then(() => console.log('Connected to MongoDB server'))
+  .catch((err) => console.log(err));
 
 const app = express();
+
+// redirect HTTP requests to HTTPS
+// app.all('*', (req, res, next) => {
+//   if (req.secure) {
+//     return next();
+//   } else {
+//     console.log(
+//       `Redirecting to: https://${req.hostname}:${app.get('secPort')}${req.url}`
+//     );
+//     res.redirect(
+//       301,
+//       `https://${req.hostname}:${app.get('secPort')}${req.url}`
+//     );
+//   }
+// });
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 
-app.get('/', (req, res) => {
-  res.end('Hello');
-});
-
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use('/products', productsRouter);
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

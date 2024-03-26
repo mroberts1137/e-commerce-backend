@@ -1,7 +1,7 @@
 const express = require('express');
-const productsRouter = express.Router();
+const router = express.Router();
 
-productsRouter
+router
   .route('/')
   .all((req, res, next) => {
     res.statusCode = 200;
@@ -12,7 +12,7 @@ productsRouter
     res.end('Fetching all products');
   });
 
-productsRouter
+router
   .route('/:productId')
   .all((req, res, next) => {
     res.statusCode = 200;
@@ -23,4 +23,4 @@ productsRouter
     res.end(`Fetching product ${req.params.productId}`);
   });
 
-module.exports = productsRouter;
+module.exports = router;
