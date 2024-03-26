@@ -1,2 +1,4 @@
 node_modules
 API_Documentation.pdf
+bin/server.cert
+bin/server.key
