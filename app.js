@@ -5,6 +5,9 @@ const passport = require('passport');
 const config = require('./config');
 const path = require('path');
 const logger = require('morgan');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 /**
  * Routers
@@ -18,7 +21,9 @@ const productsRouter = require('./routes/productsRouter');
  * Connect to MongoDB
  */
 
+// const url = process.env.CONNECTIONSTRING;
 const url = config.mongoUrl;
+
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false,
@@ -55,6 +60,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
+
+/**
+ * Routes
+ */
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

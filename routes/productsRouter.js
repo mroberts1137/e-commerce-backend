@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../authenticate');
+const authenticate = require('../utils/authenticate');
 
 /**
  * Route: localhost:3000/products'
@@ -9,22 +9,16 @@ const authenticate = require('../authenticate');
 router
   .route('/')
   .get((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'plain/text');
-    res.end('Sending all products');
+    res.status(200).send('Sending all products');
   })
   .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    res.json({ success: true, status: 'Posted successfully!' });
+    res.status(200).json({ success: true, status: 'Posted successfully!' });
   })
   .put((req, res) => {
-    res.statusCode = 403;
-    res.end('PUT operation not supported on /products');
+    res.status(403).send('PUT operation not supported on /products');
   })
   .delete((req, res) => {
-    res.statusCode = 403;
-    res.end('DELETE operation not supported on /products');
+    res.status(403).send('DELETE operation not supported on /products');
   });
 
 /**
@@ -34,25 +28,26 @@ router
 router
   .route('/:productId')
   .get((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'plain/text');
-    res.end(`Fetching product ${req.params.productId}`);
+    res.status(200).send(`Fetching product ${req.params.productId}`);
   })
   .post((req, res, next) => {
-    res.statusCode = 403;
-    res.end(
-      `POST operation not supported on /products/${req.params.productId}`
-    );
+    res
+      .status(403)
+      .send(
+        `POST operation not supported on /products/${req.params.productId}`
+      );
   })
   .put((req, res) => {
-    res.statusCode = 403;
-    res.end(`PUT operation not supported on /products/${req.params.productId}`);
+    res
+      .status(403)
+      .send(`PUT operation not supported on /products/${req.params.productId}`);
   })
   .delete((req, res) => {
-    res.statusCode = 403;
-    res.end(
-      `DELETE operation not supported on /products/${req.params.productId}`
-    );
+    res
+      .status(403)
+      .send(
+        `DELETE operation not supported on /products/${req.params.productId}`
+      );
   });
 
 module.exports = router;

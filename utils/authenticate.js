@@ -2,8 +2,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const jwt = require('jsonwebtoken');
-const User = require('./models/user');
-const config = require('./config');
+const User = require('../models/user');
+const config = require('../config');
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
